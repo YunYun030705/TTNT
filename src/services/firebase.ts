@@ -8,7 +8,9 @@ import { config, validateConfig } from "../config";
 
 // Validate configuration before initializing Firebase
 if (!validateConfig()) {
-  throw new Error("Invalid Firebase configuration. Please check your environment variables.");
+  throw new Error(
+    "Invalid Firebase configuration. Please check your environment variables."
+  );
 }
 
 // Your web app's Firebase configuration

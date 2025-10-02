@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 
 // Load environment variables
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,14 +14,19 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-  credentials: process.env.CORS_CREDENTIALS === 'true' || true,
-  optionsSuccessStatus: 200
+  credentials: process.env.CORS_CREDENTIALS === "true" || true,
+  optionsSuccessStatus: 200,
 };
 
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json({ limit: process.env.MAX_FILE_SIZE || "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: process.env.MAX_FILE_SIZE || "10mb" }));
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: process.env.MAX_FILE_SIZE || "10mb",
+  })
+);
 
 // Cấu hình multer để lưu files
 const storage = multer.diskStorage({
@@ -39,22 +44,30 @@ const storage = multer.diskStorage({
 
 // File filter để kiểm tra loại file
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = (process.env.ALLOWED_EXTENSIONS || 'jpg,jpeg,png,gif').split(',');
-  const fileExtension = path.extname(file.originalname).toLowerCase().substring(1);
-  
+  const allowedExtensions = (
+    process.env.ALLOWED_EXTENSIONS || "jpg,jpeg,png,gif"
+  ).split(",");
+  const fileExtension = path
+    .extname(file.originalname)
+    .toLowerCase()
+    .substring(1);
+
   if (allowedExtensions.includes(fileExtension)) {
     cb(null, true);
   } else {
-    cb(new Error(`Chỉ chấp nhận các định dạng: ${allowedExtensions.join(', ')}`), false);
+    cb(
+      new Error(`Chỉ chấp nhận các định dạng: ${allowedExtensions.join(", ")}`),
+      false
+    );
   }
 };
 
-const upload = multer({ 
+const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 10485760 // 10MB default
-  }
+    fileSize: parseInt(process.env.MAX_FILE_SIZE) || 10485760, // 10MB default
+  },
 });
 
 // Endpoint để so sánh khuôn mặt

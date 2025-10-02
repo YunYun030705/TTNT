@@ -4,17 +4,15 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { config, validateConfig } from "../config";
+
+// Validate configuration before initializing Firebase
+if (!validateConfig()) {
+  throw new Error("Invalid Firebase configuration. Please check your environment variables.");
+}
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBeXLb_nswpv6QoqiLgXK3nZypZcAy3W2s",
-  authDomain: "student-attendance-syste-83b22.firebaseapp.com",
-  projectId: "student-attendance-syste-83b22",
-  storageBucket: "student-attendance-syste-83b22.firebasestorage.app",
-  messagingSenderId: "334753420863",
-  appId: "1:334753420863:web:116e6a95696621a8ba0a8a",
-  measurementId: "G-MRFF1G3X49",
-};
+const firebaseConfig = config.firebase;
 
 const app = initializeApp(firebaseConfig);
 
